@@ -5,11 +5,16 @@ import 'personVo.dart';
 class ReadPage extends StatelessWidget {
   const ReadPage({super.key});
 
+  //기본레이아웃
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("읽기페이지")),
-      body: _ReadPage()
+      body: Container(
+        padding: EdgeInsets.all(15),
+        color: Color(0xffd6d6d6),
+        child: _ReadPage()
+      )
     );
   }
 }
@@ -56,78 +61,73 @@ class _ReadPageState extends State<_ReadPage> {
           return Center(child: Text('데이터가 없습니다.'));
         } else { //데이터가 있으면
 
-          return Container(
-              padding: EdgeInsets.all(15),
-              color: Color(0xffd6d6d6),
-              child: Column(
+          return Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                          width: 70,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("번호", style: TextStyle(fontSize: 20),)),
-                      Container(
-                          width: 400,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("${snapshot.data!.personId}", style: TextStyle(fontSize: 20),))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                          width: 70,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("이름", style: TextStyle(fontSize: 20),)),
-                      Container(
-                          width: 400,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("${snapshot.data!.name}", style: TextStyle(fontSize: 20),))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                          width: 70,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("핸드폰", style: TextStyle(fontSize: 20),)),
-                      Container(
-                          width: 400,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("${snapshot.data!.hp}", style: TextStyle(fontSize: 20),))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                          width: 70,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("회사", style: TextStyle(fontSize: 20),)),
-                      Container(
-                          width: 400,
-                          height: 50,
-                          color: Color(0xffffffff),
-                          alignment: Alignment.centerLeft,
-                          child: Text("${snapshot.data!.company}", style: TextStyle(fontSize: 20),))
-                    ],
-                  ),
+                  Container(
+                      width: 70,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("번호", style: TextStyle(fontSize: 20),)),
+                  Container(
+                      width: 400,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data!.personId}", style: TextStyle(fontSize: 20),))
                 ],
-              )
-
+              ),
+              Row(
+                children: [
+                  Container(
+                      width: 70,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("이름", style: TextStyle(fontSize: 20),)),
+                  Container(
+                      width: 400,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data!.name}", style: TextStyle(fontSize: 20),))
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                      width: 70,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("핸드폰", style: TextStyle(fontSize: 20),)),
+                  Container(
+                      width: 400,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data!.hp}", style: TextStyle(fontSize: 20),))
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                      width: 70,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("회사", style: TextStyle(fontSize: 20),)),
+                  Container(
+                      width: 400,
+                      height: 50,
+                      color: Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data!.company}", style: TextStyle(fontSize: 20),))
+                ],
+              ),
+            ],
           );
 
         } // 데이터가있으면
