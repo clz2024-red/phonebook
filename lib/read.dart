@@ -33,23 +33,30 @@ class _ReadPageState extends State<_ReadPage> {
   //미래의 정우성 데이터가 담길거야
   late Future<PersonVo> personVoFuture;
 
+
   //초기화함수 (1번만 실행됨)
   @override
   void initState() {
     super.initState();
-    //추가코드  //데이타불러오기메소드 호출
-    print("initState(): 데이터 가져오기 전");
 
-    personVoFuture = getPersonByNo();
-
-    print("initState(): 데이터 가져오기 후");
   }
 
 
   //화면그리기
   @override
   Widget build(BuildContext context) {
+    // ModalRoute를 통해 현재 페이지에 전달된 arguments를 가져옵니다.
+    late final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+    // 'personId' 키를 사용하여 값을 추출합니다.
+    late final personId = args['personId'];
+    personVoFuture = getPersonByNo(personId);
+
+    print("-----------------------");
+    print(personId);
+    print("-----------------------");
     print("build(): 그리기 작업");
+
     return FutureBuilder(
       future: personVoFuture, //Future<> 함수명, 으로 받은 데이타
       builder: (context, snapshot) {
@@ -138,7 +145,9 @@ class _ReadPageState extends State<_ReadPage> {
 
 
   //3번(정우성) 데이타 가져오기 return  그림X
-  Future<PersonVo> getPersonByNo() async {
+  Future<PersonVo> getPersonByNo(int pId) async {
+
+    print(pId);
     print("getPersonByNo(): 데이터 가져오기 중");
     try {
       /*----요청처리-------------------*/
@@ -150,7 +159,7 @@ class _ReadPageState extends State<_ReadPage> {
 
       // 서버 요청
       final response = await dio.get(
-        'http://15.164.245.216:9000/api/persons/4',
+        'http://15.164.245.216:9000/api/persons/${pId}',
       );
 
       /*----응답처리-------------------*/

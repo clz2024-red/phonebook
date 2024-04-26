@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'read.dart';
 import 'list.dart';
+import 'writeform.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/read": (context) => ReadPage(),
         "/list": (context) => ListPage(),
+        "/write": (context) => WriteForm(),
       },
 
 

@@ -15,7 +15,13 @@ class ListPage extends StatelessWidget {
         padding: EdgeInsets.all(15),
         color: Color(0xffd6d6d6),
         child: _ListPage()
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.pushNamed( context, '/write', );
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
@@ -32,7 +38,7 @@ class _ListPage extends StatefulWidget {
 class _ListPageState extends State<_ListPage> {
 
   //공통변수
-
+  late Future<List<PersonVo>> personListFuture;
 
   //생애주기별 훅
 
@@ -40,18 +46,92 @@ class _ListPageState extends State<_ListPage> {
   @override
   void initState() {
     super.initState();
-    getPersonList();
+    personListFuture = getPersonList();  //메소드 사용
   }
-
 
   //그림그릴때
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return FutureBuilder(
+      future: personListFuture, //Future<> 함수명, 으로 받은 데이타
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('데이터를 불러오는 데 실패했습니다.'));
+        } else if (!snapshot.hasData) {
+          return Center(child: Text('데이터가 없습니다.'));
+        } else { //데이터가 있으면
+
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                children: [
+                  Container(
+                      width: 50,
+                      height:40,
+                      color:Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data![index].personId}", style: TextStyle(fontSize: 20),)
+                  ),
+                  Container(
+                      width: 80,
+                      height:40,
+                      color:Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data![index].name}", style: TextStyle(fontSize: 20),)
+                  ),
+                  Container(
+                      width: 150,
+                      height:40,
+                      color:Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data![index].hp}", style: TextStyle(fontSize: 20),)
+                  ),
+                  Container(
+                      width: 150,
+                      height:40,
+                      color:Color(0xffffffff),
+                      alignment: Alignment.centerLeft,
+                      child: Text("${snapshot.data![index].company}", style: TextStyle(fontSize: 20),)
+                  ),
+                  Container(
+                    width: 40,
+                    height:40,
+                    color:Color(0xffffffff),
+                    child: IconButton(
+                        onPressed: () {
+
+                          Navigator.pushNamed(
+                            context,
+                            "/read",
+                            arguments: {
+                              "personId": snapshot.data![index].personId
+                            }
+                          );
+
+                        },
+                        icon: Icon(Icons.arrow_forward_ios)
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+
+          
+        } // 데이터가있으면
+      },
+    );
+
   }
 
-  //리스트가져오기 dio통신
-  Future< List<PersonVo> > getPersonList() async {
+  
+
+
+  //리스트가져오기 dio통신 메소드 정의
+  Future<List<PersonVo>> getPersonList() async {
     try {
       /*----요청처리-------------------*/
       //Dio 객체 생성 및 설정
