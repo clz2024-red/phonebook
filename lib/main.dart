@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'read.dart';
 import 'list.dart';
 import 'writeform.dart';
+import 'editform.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         "/read": (context) => ReadPage(),
         "/list": (context) => ListPage(),
         "/write": (context) => WriteForm(),
+        "/edit": (context) => EditForm(),
       },
 
 

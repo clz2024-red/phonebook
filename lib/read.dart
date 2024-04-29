@@ -9,12 +9,12 @@ class ReadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("읽기페이지")),
-      body: Container(
-        padding: EdgeInsets.all(15),
-        color: Color(0xffd6d6d6),
-        child: _ReadPage()
-      )
+        appBar: AppBar(title: Text("읽기페이지")),
+        body: Container(
+            padding: EdgeInsets.all(15),
+            color: Color(0xffd6d6d6),
+            child: _ReadPage()
+        )
     );
   }
 }
@@ -47,14 +47,12 @@ class _ReadPageState extends State<_ReadPage> {
   Widget build(BuildContext context) {
     // ModalRoute를 통해 현재 페이지에 전달된 arguments를 가져옵니다.
     late final args = ModalRoute.of(context)!.settings.arguments as Map;
-
     // 'personId' 키를 사용하여 값을 추출합니다.
     late final personId = args['personId'];
+
+    //personId의 데이터를 서버로 부터 가져오기
     personVoFuture = getPersonByNo(personId);
 
-    print("-----------------------");
-    print(personId);
-    print("-----------------------");
     print("build(): 그리기 작업");
 
     return FutureBuilder(
@@ -134,13 +132,47 @@ class _ReadPageState extends State<_ReadPage> {
                       child: Text("${snapshot.data!.company}", style: TextStyle(fontSize: 20),))
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 130,
+                    height: 45,
+                    margin: EdgeInsets.fromLTRB(0, 15, 10, 0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context,
+                            "/edit",
+                            arguments: {
+                              "personId": personId
+                            }
+                        );
+                      },
+                      child: Text("수정"),
+                    ),
+                  ),
+                  Container(
+                    width: 130,
+                    height: 45,
+                    margin: EdgeInsets.fromLTRB(0, 15, 10, 0),
+                    child: ElevatedButton(
+                      onPressed: (){
+                        print("삭제");
+                        removePerson(personId);
+                      },
+                      child: Text("삭제"),
+                    ),
+                  ),
+                ],
+              ),
             ],
           );
 
         } // 데이터가있으면
       },
     );
-    ;
+
   }
 
 
@@ -178,7 +210,40 @@ class _ReadPageState extends State<_ReadPage> {
     }
   }
 
+  //현재 데이타 삭제
+  Future<void> removePerson(int pId) async {
 
+    print(pId);
+    print("getPersonByNo(): 데이터 가져오기 중");
+    try {
+      /*----요청처리-------------------*/
+      //Dio 객체 생성 및 설정
+      var dio = Dio();
+
+      // 헤더설정:json으로 전송
+      dio.options.headers['Content-Type'] = 'application/json';
+
+      // 서버 요청
+      final response = await dio.delete(
+        'http://15.164.245.216:9000/api/persons/${pId}',
+      );
+
+      /*----응답처리-------------------*/
+      if (response.statusCode == 200) {
+        //접속성공 200 이면
+        print(response.data); // json->map 자동변경
+        Navigator.pushNamed( context, '/list', );
+        //return PersonVo.fromJson(response.data["apiData"]);
+
+      } else {
+        //접속실패 404, 502등등 api서버 문제
+        throw Exception('api 서버 문제');
+      }
+    } catch (e) {
+      //예외 발생
+      throw Exception('Failed to load person: $e');
+    }
+  }
 
 }
 
